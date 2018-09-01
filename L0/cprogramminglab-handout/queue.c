@@ -22,6 +22,7 @@
 */
 queue_t *q_new()
 {
+
     /* Remember to handle the case if malloc returned NULL */
     return NULL;
 }
