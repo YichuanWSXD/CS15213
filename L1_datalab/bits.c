@@ -12,7 +12,7 @@
  * it's not good practice to ignore compiler warnings, but in this
  * case it's OK.  
  */
-
+// Contributor: Yichuan Wang
 #if 0
 /*
  * Instructions to Students:
@@ -139,7 +139,9 @@ NOTES:
  *   Rating: 1
  */
 int bitAnd(int x, int y) {
-  return 2;
+    int result;
+    result = x+y-(x|y);
+    return result;
 }
 /* 
  * getByte - Extract byte n from word x
@@ -150,14 +152,13 @@ int bitAnd(int x, int y) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-
-
-
-
-
-
-
-  return 2;
+    /*
+     &0xff only remains the last byte.
+     
+     */
+    int result;
+    result = x >>(n*8) & 0xff;
+    return result;
 
 }
 /* 
@@ -169,7 +170,15 @@ int getByte(int x, int n) {
  *   Rating: 3 
  */
 int logicalShift(int x, int n) {
-  return 2;
+    /*
+     logical shift requires that the first n bits are 0. Therefore, we obtian a bit pattern
+     in which the first n bits are 1 and the rest with 0, and then use xor to elimite the extral
+     leading 0s, which are from the arithmetic shift.
+     */
+    int result;
+    int leading_ones = 1<<31>>n<<1;
+    result = ((x>>n)^leading_ones) & (x>>n) ;
+    return result;
 }
 /*
  * bitCount - returns count of number of 1's in word
@@ -179,7 +188,19 @@ int logicalShift(int x, int n) {
  *   Rating: 4
  */
 int bitCount(int x) {
-  return 2;
+    //hamming weight algorithm
+    int m1,m2,m4,m8,m16;
+    m1 =0x55555555;
+    m2 =0x33333333;
+    m4 =0x0F0F0F0F;
+    m8 =0xFF00FF;
+    m16 =0xFFFF;
+    x = (x&m1)+((x>>1)&m1);
+    x = (x&m2)+((x>>2)&m2);
+    x = (x&m4)+((x>>4)&m4);
+    x = (x&m8)+((x>>8)&m8);
+    x = (x&m16)+((x>>16)&m16);
+    return x;
 }
 /* 
  * bang - Compute !x without using !
@@ -189,7 +210,14 @@ int bitCount(int x) {
  *   Rating: 4 
  */
 int bang(int x) {
-  return 2;
+    // if the significant bit contains a 1, then copy 1s to the less significant bit position and compare the opposite of it with 0.
+    int ret;
+    ret = (x>>1)&x;
+    ret = (ret>>2)&x;
+    ret = (ret>>4)&x;
+    ret = (ret>>8)&x;
+    ret = (ret>>16)&x;
+    return ((~ret)&0);
 }
 /* 
  * tmin - return minimum two's complement integer 
@@ -198,7 +226,8 @@ int bang(int x) {
  *   Rating: 1
  */
 int tmin(void) {
-  return 2;
+    //left shift to obtain the tmin
+  return 1<<31;
 }
 /* 
  * fitsBits - return 1 if x can be represented as an 
@@ -210,7 +239,9 @@ int tmin(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-  return 2;
+    //left shift (31-n) and then right shift to see whether the number equals to the original number.
+    int shift=32+(~n+1);
+    return !((x<<shift)>>shift^x);
 }
 /* 
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
