@@ -2,7 +2,6 @@
  * 
  * <Please put your name and userid here>
  * 
-  
  * bits.c - Source file with your solutions to the Lab.
  *          This is the file you will hand in to your instructor.
  *
@@ -255,15 +254,9 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int divpwr2(int x, int n) {
-// right shift n bits and the leftover is the answer for postive number. However, when x < 0, consider add 1 to the result.
-// Moreover, when x is negative, there are two cases where add 1 is unnecessary: a. n = 0; b. last n bits of x is 0
-  int a, b,result;
-  a = !(x>>31);
-  b = (!n)|(!(~(x>>n<<n)&x));
-  result= (x>>n)+!(a|b);
-  return result;
+// right shift n bits and the leftover is the answer for postive number. However, when x < 0, consider minus 1 to the result.
+    return ((x>>n)-(!(~(x>>31)|n)));
 
-  
 
 }
 /* 
@@ -295,15 +288,10 @@ int isPositive(int x) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-// y-x should be positive or zero. Also avoid the overflow problem.
-  int result,x_sign,y_sign,overflow1,overflow2;
-  x_sign = x>>31;
-  y_sign = y>>31; // sign bit: -1 -> negative 0-> positive or zero
-  overflow1 = !((~y_sign)|x_sign); // return 1 (which is also the function answer) when y<0 x>0 which could cause overflow.
-  overflow2 = !((~x_sign)|y_sign); // return 1 when x<0 and y>0.
-  result = (~x+1)+y; //  y-x.
-  return !((!((!(result>>31))|overflow2))|overflow1);
-
+// y-x should be positive or zero
+  int result;
+  result = y+(~x+1); 
+  return !(!(~(result>>31)));
 }
 /*
  * ilog2 - return floor(log base 2 of x), where x > 0
@@ -313,15 +301,8 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4
  */
 int ilog2(int x) {
-  int result;
-  result = 0;
-  result = (!!(x>>16))*16; 
-  result = result + (!!(x>>(8+result)))*8; 
-  result = result +(!!(x>>(4+result)))*4;
-  result = result +(!!(x>>(2+result)))*2;
-  result = result +(!!(x>>(1+result)));
-  return result;
-} 
+  return 2;
+}
 /* 
  * float_neg - Return bit-level equivalent of expression -f for
  *   floating point argument f.
@@ -334,11 +315,7 @@ int ilog2(int x) {
  *   Rating: 2
  */
 unsigned float_neg(unsigned uf) {
-  // if the bits after the sign bit are greater than 0xff000000, the answer is nan. Otherwise simply change the sign bit
-  if((uf<<1)>(0xff000000))
-	return uf;
-  else
-  	return uf^0x80000000;
+ return 2;
 }
 /* 
  * float_i2f - Return bit-level equivalent of expression (float) x
@@ -350,10 +327,6 @@ unsigned float_neg(unsigned uf) {
  *   Rating: 4
  */
 unsigned float_i2f(int x) {
-  if(x==0){
-	  return x;
-  }
-  if(x>0)
   return 2;
 }
 /* 
