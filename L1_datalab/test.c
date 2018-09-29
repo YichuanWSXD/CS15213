@@ -6,24 +6,18 @@ int fitsBits(int x, int n) {
     return result;
 }
 int main () {
-	  int result,x;
-	  x=1;
-  result = 0;
-printf("%d\n",result);    
-  result = (!!(x>>16))*16;
-printf("%d\n",result);    
-  result = result + (!!(x>>(8+result)))*8;
-printf("%d\n",result);    
-  result = result +(!!(x>>(4+result)))*4;
-printf("%d\n",result);    
-  result = result +(!!(x>>(2+result)))*2;
-printf("%d\n",result);    
-  result = result +(!!(x>>(1+result)));
-printf("%d\n",result);    
-
-    return 0;
+unsigned temp = 0;
+  if((temp&0x7f800000)==0){
+	temp = (temp&0x80000000)|((temp&0x007fffff)<<1);
+  }
+  else if((temp&0x7f800000)!=0x7f800000){
+     temp+= (1<<23);
+     if((temp &0x7f800000)==0x7f800000){
+             temp=(temp>>23)<<23;
+     }
+  }
+ printf("%d\n",temp); 
 }
-
 /* function returning the max between two numbers */
 
 

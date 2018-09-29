@@ -353,7 +353,6 @@ unsigned float_i2f(int x) {
   if(x==0){
 	  return x;
   }
-  if(x>0)
   return 2;
 }
 /* 
@@ -368,5 +367,15 @@ unsigned float_i2f(int x) {
  *   Rating: 4
  */
 unsigned float_twice(unsigned uf) {
-  return 2;
+  unsigned temp = uf;
+  if((temp&0x7f800000)==0){
+     temp = (temp&0x80000000)|((temp&0x007fffff)<<1);
+  }
+  else if((temp&0x7f800000)!=0x7f800000){
+     temp+= (1<<23);
+     if((temp &0x7f800000)==0x7f800000){
+	     temp=(temp>>23)<<23;
+     }
+  }
+  return temp;
 }
